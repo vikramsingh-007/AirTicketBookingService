@@ -12,6 +12,14 @@ class BookingRepository {
       if (error.name == "SequelizeValidationError") {
         throw new ValidationError(error);
       }
+      if (error.name == "SequelizeDatabaseError") {
+        throw new AppError(
+          "DatabaseError",
+          "some data is incorrect",
+          "Invalid values for Some Properties",
+          StatusCodes.BAD_GATEWAY
+        );
+      }
       throw new AppError(
         "RepositoryError",
         "Cannot create Booking",

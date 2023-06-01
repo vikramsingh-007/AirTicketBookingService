@@ -34,7 +34,11 @@ class BookingService {
       });
       return finalBooking;
     } catch (error) {
-      if (error.name == "RepositoryError" || error.name == "ValidationError") {
+      if (
+        error.name == "RepositoryError" ||
+        error.name == "ValidationError" ||
+        error.name == "DatabaseError"
+      ) {
         throw error;
       }
       throw new ServiceError();
