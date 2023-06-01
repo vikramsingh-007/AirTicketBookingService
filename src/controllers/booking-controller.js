@@ -7,7 +7,7 @@ const bookingService = new BookingService();
 const create = async (req, res) => {
   try {
     const response = await bookingService.create(req.body);
-    return res.status(StatusCodes.OK).json({
+    return res.status(StatusCodes.CREATED).json({
       message: "Successfully Completed Booking",
       err: {},
       success: true,
@@ -23,6 +23,26 @@ const create = async (req, res) => {
   }
 };
 
+const update = async (req, res) => {
+  try {
+    const response = await bookingService.update(req.params.id);
+    return res.status(StatusCodes.OK).json({
+      message: "Successfully Cancelled the Booking",
+      err: {},
+      data: response,
+      success: true,
+    });
+  } catch (error) {
+    return res.status(error.statusCode).json({
+      message: error.message,
+      err: error.explanation,
+      data: {},
+      success: false,
+    });
+  }
+};
+
 module.exports = {
   create,
+  update,
 };

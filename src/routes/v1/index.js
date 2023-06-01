@@ -5,10 +5,12 @@ const { BookingMiddleware } = require("../../middlewares/index");
 
 const router = express.Router();
 
-router.use(
+router.post(
   "/bookings",
   BookingMiddleware.validateCreateBooking,
   BookingController.create
 );
+
+router.patch("/bookings/:id", BookingController.update);
 
 module.exports = router;

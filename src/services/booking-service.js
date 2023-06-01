@@ -37,8 +37,45 @@ class BookingService {
       if (
         error.name == "RepositoryError" ||
         error.name == "ValidationError" ||
-        error.name == "DatabaseError"
+        error.name == "DatabaseError" ||
+        error.name == "ServiceError"
       ) {
+        throw error;
+      }
+      throw new ServiceError();
+    }
+  }
+
+  async update(bookingId) {
+    try {
+      const booking = await this.bookingRepository.get(bookingId);
+      if (booking.status == "Cancelled") {
+        throw new ServiceError(
+          "Cannot Cancel Ticket",
+          "Ticket is already cancelled"
+        );
+      }
+      const getFlightRequestURL = `${FLIGHT_SERVICE_PATH}/api/v1/flights/${booking.flightId}`;
+      const response = await axios.get(getFlightRequestURL);
+      const flightData = response.data.data;
+      const date = new Date();
+      date.setHours(date.getHours() + 4);
+      if (date > flightData.departureTime) {
+        throw new ServiceError(
+          "Cannot Cancel Ticket",
+          "Ticket can only be cancelled 4 hours before the departure"
+        );
+      }
+      const updateFlightRequestURL = `${FLIGHT_SERVICE_PATH}/api/v1/flights/${booking.flightId}`;
+      await axios.patch(updateFlightRequestURL, {
+        totalSeats: flightData.totalSeats + booking.noOfSeats,
+      });
+      const finalResponse = await this.bookingRepository.update(bookingId, {
+        status: "Cancelled",
+      });
+      return finalResponse;
+    } catch (error) {
+      if (error.name == "RepositoryError" || error.name == "ServiceError") {
         throw error;
       }
       throw new ServiceError();
