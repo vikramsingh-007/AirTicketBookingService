@@ -12,5 +12,7 @@ router.post(
 );
 
 router.patch("/bookings/:id", BookingController.update);
+router.get("/bookings/:id", BookingController.get);
+router.get("/bookings", BookingController.getAll);
 
 module.exports = router;

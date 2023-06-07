@@ -81,6 +81,30 @@ class BookingService {
       throw new ServiceError();
     }
   }
+
+  async get(bookingId) {
+    try {
+      const booking = await this.bookingRepository.get(bookingId);
+      return booking;
+    } catch (error) {
+      if (error.name == "RepositoryError") {
+        throw error;
+      }
+      throw new ServiceError();
+    }
+  }
+
+  async getAll() {
+    try {
+      const bookings = await this.bookingRepository.getAll();
+      return bookings;
+    } catch (error) {
+      if (error.name == "RepositoryError") {
+        throw error;
+      }
+      throw new ServiceError();
+    }
+  }
 }
 
 module.exports = BookingService;

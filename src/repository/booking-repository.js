@@ -63,6 +63,20 @@ class BookingRepository {
       );
     }
   }
+
+  async getAll() {
+    try {
+      const bookings = await Booking.findAll();
+      return bookings;
+    } catch (error) {
+      throw new AppError(
+        "RepositoryError",
+        "Cannot get Booking",
+        "There was some internal issue while getting the booking, please try again later",
+        StatusCodes.INTERNAL_SERVER_ERROR
+      );
+    }
+  }
 }
 
 module.exports = BookingRepository;

@@ -42,7 +42,47 @@ const update = async (req, res) => {
   }
 };
 
+const get = async (req, res) => {
+  try {
+    const response = await bookingService.get(req.params.id);
+    return res.status(StatusCodes.OK).json({
+      message: "Successfully retrieved the Booking",
+      err: {},
+      data: response,
+      success: true,
+    });
+  } catch (error) {
+    return res.status(error.statusCode).json({
+      message: error.message,
+      err: error.explanation,
+      data: {},
+      success: false,
+    });
+  }
+};
+
+const getAll = async (req, res) => {
+  try {
+    const response = await bookingService.getAll();
+    return res.status(StatusCodes.OK).json({
+      message: "Successfully retrieved all the Bookings",
+      err: {},
+      data: response,
+      success: true,
+    });
+  } catch (error) {
+    return res.status(error.statusCode).json({
+      message: error.message,
+      err: error.explanation,
+      data: {},
+      success: false,
+    });
+  }
+};
+
 module.exports = {
   create,
   update,
+  get,
+  getAll,
 };
