@@ -4,15 +4,17 @@ const { BookingController } = require("../../controllers/index");
 const { BookingMiddleware } = require("../../middlewares/index");
 
 const router = express.Router();
+const bookingController = new BookingController();
 
 router.post(
   "/bookings",
   BookingMiddleware.validateCreateBooking,
-  BookingController.create
+  bookingController.create
 );
+router.post("/publish", bookingController.sendMessageToQueue);
 
-router.patch("/bookings/:id", BookingController.update);
-router.get("/bookings/:id", BookingController.get);
-router.get("/bookings", BookingController.getAll);
+router.patch("/bookings/:id", bookingController.update);
+router.get("/bookings/:id", bookingController.get);
+router.get("/bookings", bookingController.getAll);
 
 module.exports = router;
